@@ -33,7 +33,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'last_login_at'     => 'datetime',
         'is_active'         => 'boolean',
-        'role'              => UserRole::class,
+        'role' => 'string',
     ];
 
     // Relaciones
@@ -50,16 +50,16 @@ class User extends Authenticatable
     // Helpers
     public function isDoctor(): bool
     {
-        return $this->role === UserRole::Doctor;
+        return $this->role === 'doctor';
     }
 
     public function isPatient(): bool
     {
-        return $this->role === UserRole::Patient;
+        return $this->role === 'patient';
     }
 
     public function isAdmin(): bool
     {
-        return $this->role === UserRole::Admin;
+        return $this->role === 'admin';
     }
 }

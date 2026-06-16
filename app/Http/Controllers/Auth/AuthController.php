@@ -29,7 +29,7 @@ class AuthController extends Controller
                 'email'    => $request->email,
                 'password' => Hash::make($request->password),
                 'phone'    => $request->phone,
-                'role'     => UserRole::Patient,
+                'role' => 'patient',
             ]);
 
             Patient::create([
@@ -65,7 +65,7 @@ class AuthController extends Controller
                 'email'    => $request->email,
                 'password' => $request->password,
                 'phone'    => $request->phone,
-                'role'     => UserRole::Doctor,
+                'role'     => 'doctor',
             ]);
 
             $licenseDocument = null;
