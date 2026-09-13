@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\ConsultationType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
