@@ -79,6 +79,21 @@ class Doctor extends Model
         return $this->hasMany(Subscription::class);
     }
 
+    public function therapeuticApproaches(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(TherapeuticApproach::class, 'doctor_therapeutic_approach');
+    }
+
+    public function therapyModalities(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(TherapyModality::class, 'doctor_therapy_modality');
+    }
+
+    public function targetPopulations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(TargetPopulation::class, 'doctor_target_population');
+    }
+
     // Scopes
     public function scopeVerified($query)
     {

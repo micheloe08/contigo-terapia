@@ -1,10 +1,14 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Admin\CatalogController;
 use App\Http\Controllers\Supervisor\DoctorApprovalController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
+
+    // Endpoint público — catálogos para formularios
+    Route::get('catalogs', [CatalogController::class, 'public']);
 
     // Rutas públicas — auth
     Route::prefix('auth')->group(function () {
@@ -20,7 +24,10 @@ Route::prefix('v1')->group(function () {
 
         // Rutas de admin
         Route::middleware('role:admin')->prefix('admin')->group(function () {
-            // Aquí irán los endpoints del panel de admin
+            Route::get('catalogs/{type}',        [CatalogController::class, 'index']);
+            Route::post('catalogs/{type}',       [CatalogController::class, 'store']);
+            Route::put('catalogs/{type}/{id}',   [CatalogController::class, 'update']);
+            Route::delete('catalogs/{type}/{id}',[CatalogController::class, 'destroy']);
         });
 
         // Rutas de admin y operator
