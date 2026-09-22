@@ -61,4 +61,19 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+
+    public function isOperator(): bool
+    {
+        return $this->role === 'operator';
+    }
+
+    public function isSupervisorDoctor(): bool
+    {
+        return $this->role === 'supervisor_doctor';
+    }
+
+    public function hasRole(string ...$roles): bool
+    {
+        return in_array($this->role, $roles);
+    }
 }

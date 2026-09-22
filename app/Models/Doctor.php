@@ -11,6 +11,12 @@ class Doctor extends Model
 
     protected $fillable = [
         'user_id',
+        'status',
+        'approved_by',
+        'approved_at',
+        'rejection_reason',
+        'membership_status',
+        'membership_expires_at',
         'specialty_id',
         'license_number',
         'license_document',
@@ -37,7 +43,9 @@ class Doctor extends Model
         'rating'              => 'decimal:2',
         'experience_years'    => 'integer',
         'total_reviews'       => 'integer',
-        'total_consultations' => 'integer',
+        'total_consultations'  => 'integer',
+        'approved_at'          => 'datetime',
+        'membership_expires_at'=> 'datetime',
     ];
 
     // Relaciones
