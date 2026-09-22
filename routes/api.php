@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Supervisor\DoctorApprovalController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -29,7 +30,11 @@ Route::prefix('v1')->group(function () {
 
         // Rutas de supervisor de terapeutas
         Route::middleware('role:admin,supervisor_doctor')->prefix('supervisor')->group(function () {
-            // Aquí irán los endpoints de aprobación de terapeutas
+            Route::get('stats',                          [DoctorApprovalController::class, 'stats']);
+            Route::get('doctors',                        [DoctorApprovalController::class, 'index']);
+            Route::get('doctors/{doctor}',               [DoctorApprovalController::class, 'show']);
+            Route::post('doctors/{doctor}/approve',      [DoctorApprovalController::class, 'approve']);
+            Route::post('doctors/{doctor}/reject',       [DoctorApprovalController::class, 'reject']);
         });
 
         // Rutas de doctor
