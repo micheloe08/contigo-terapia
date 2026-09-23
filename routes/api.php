@@ -3,12 +3,18 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\CatalogController;
 use App\Http\Controllers\Supervisor\DoctorApprovalController;
+use App\Http\Controllers\Public\DoctorSearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
 
     // Endpoint público — catálogos para formularios
     Route::get('catalogs', [CatalogController::class, 'public']);
+
+    // Endpoints públicos — búsqueda de terapeutas
+    Route::get('doctors/filters', [DoctorSearchController::class, 'filters']);
+    Route::get('doctors',         [DoctorSearchController::class, 'index']);
+    Route::get('doctors/{doctor}',[DoctorSearchController::class, 'show']);
 
     // Rutas públicas — auth
     Route::prefix('auth')->group(function () {
