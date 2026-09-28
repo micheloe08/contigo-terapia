@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\CatalogController;
 use App\Http\Controllers\Supervisor\DoctorApprovalController;
 use App\Http\Controllers\Public\DoctorSearchController;
 use App\Http\Controllers\Doctor\ScheduleController;
+use App\Http\Controllers\Doctor\AppointmentController as DoctorAppointmentController;
+use App\Http\Controllers\Patient\AppointmentController as PatientAppointmentController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -54,15 +56,25 @@ Route::prefix('v1')->group(function () {
 
         // Rutas de doctor
         Route::middleware('role:doctor')->prefix('doctor')->group(function () {
-            Route::get('schedules',         [ScheduleController::class, 'index']);
-            Route::post('schedules',        [ScheduleController::class, 'upsert']);
+            Route::get('schedules',               [ScheduleController::class, 'index']);
+            Route::post('schedules',              [ScheduleController::class, 'upsert']);
             Route::delete('schedules/{schedule}', [ScheduleController::class, 'destroy']);
-            Route::post('schedules/block',  [ScheduleController::class, 'block']);
+            Route::post('schedules/block',        [ScheduleController::class, 'block']);
+
+            Route::get('appointments/stats',              [DoctorAppointmentController::class, 'stats']);
+            Route::get('appointments',                    [DoctorAppointmentController::class, 'index']);
+            Route::get('appointments/{appointment}',      [DoctorAppointmentController::class, 'show']);
+            Route::post('appointments/{appointment}/confirm',  [DoctorAppointmentController::class, 'confirm']);
+            Route::post('appointments/{appointment}/cancel',   [DoctorAppointmentController::class, 'cancel']);
+            Route::post('appointments/{appointment}/complete', [DoctorAppointmentController::class, 'complete']);
         });
 
         // Rutas de paciente
         Route::middleware('role:patient')->prefix('patient')->group(function () {
-            // Aquí irán los endpoints del dashboard de paciente
+            Route::get('appointments',                     [PatientAppointmentController::class, 'index']);
+            Route::post('appointments',                    [PatientAppointmentController::class, 'store']);
+            Route::get('appointments/{appointment}',       [PatientAppointmentController::class, 'show']);
+            Route::post('appointments/{appointment}/cancel',[PatientAppointmentController::class, 'cancel']);
         });
     });
 });
