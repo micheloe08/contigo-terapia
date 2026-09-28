@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\CatalogController;
 use App\Http\Controllers\Supervisor\DoctorApprovalController;
 use App\Http\Controllers\Public\DoctorSearchController;
+use App\Http\Controllers\Doctor\ScheduleController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -12,9 +13,10 @@ Route::prefix('v1')->group(function () {
     Route::get('catalogs', [CatalogController::class, 'public']);
 
     // Endpoints públicos — búsqueda de terapeutas
-    Route::get('doctors/filters', [DoctorSearchController::class, 'filters']);
-    Route::get('doctors',         [DoctorSearchController::class, 'index']);
-    Route::get('doctors/{doctor}',[DoctorSearchController::class, 'show']);
+    Route::get('doctors/filters',              [DoctorSearchController::class, 'filters']);
+    Route::get('doctors',                      [DoctorSearchController::class, 'index']);
+    Route::get('doctors/{doctor}',             [DoctorSearchController::class, 'show']);
+    Route::get('doctors/{doctor}/availability',[DoctorSearchController::class, 'availability']);
 
     // Rutas públicas — auth
     Route::prefix('auth')->group(function () {
@@ -52,7 +54,10 @@ Route::prefix('v1')->group(function () {
 
         // Rutas de doctor
         Route::middleware('role:doctor')->prefix('doctor')->group(function () {
-            // Aquí irán los endpoints del dashboard de doctor
+            Route::get('schedules',         [ScheduleController::class, 'index']);
+            Route::post('schedules',        [ScheduleController::class, 'upsert']);
+            Route::delete('schedules/{schedule}', [ScheduleController::class, 'destroy']);
+            Route::post('schedules/block',  [ScheduleController::class, 'block']);
         });
 
         // Rutas de paciente

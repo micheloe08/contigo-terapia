@@ -111,6 +111,41 @@ class DoctorSearchController extends Controller
     }
 
     /**
+     * GET /api/v1/doctors/{doctor}/availability
+     * Horarios disponibles de un terapeuta (para el paciente al agendar).
+     */
+    public function availability(Doctor $doctor): JsonResponse
+    {
+        if ($doctor->status !== 'approved') {
+            return response()->json(['message' => 'Terapeuta no disponible.'], 404);
+        }
+
+        $schedules = $doctor->schedules()
+            ->where('is_available', true)
+            ->whereNull('blocked_date')
+            ->orderBy('day_of_week')
+            ->orderBy('start_time')
+            ->get()
+            ->groupBy('day_of_week')
+            ->map(fn($slots, $day) => [
+                'day'       => $day,
+                'day_name'  => \App\Models\Schedule::DAYS[$day] ?? '',
+                'slots'     => $slots->map(fn($s) => [
+                    'id'         => $s->id,
+                    'start_time' => $s->start_time,
+                    'end_time'   => $s->end_time,
+                ]),
+            ])
+            ->values();
+
+        return response()->json([
+            'doctor_id'       => $doctor->id,
+            'session_duration' => $doctor->session_duration,
+            'availability'    => $schedules,
+        ]);
+    }
+
+    /**
      * GET /api/v1/doctors/filters
      * Opciones disponibles para los filtros.
      */
