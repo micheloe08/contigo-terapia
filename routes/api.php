@@ -7,9 +7,13 @@ use App\Http\Controllers\Public\DoctorSearchController;
 use App\Http\Controllers\Doctor\ScheduleController;
 use App\Http\Controllers\Doctor\AppointmentController as DoctorAppointmentController;
 use App\Http\Controllers\Patient\AppointmentController as PatientAppointmentController;
+use App\Http\Controllers\Patient\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
+
+    // Webhook Stripe (público pero verificado con firma)
+    Route::post('webhooks/stripe', [PaymentController::class, 'webhook']);
 
     // Endpoint público — catálogos para formularios
     Route::get('catalogs', [CatalogController::class, 'public']);
@@ -71,10 +75,13 @@ Route::prefix('v1')->group(function () {
 
         // Rutas de paciente
         Route::middleware('role:patient')->prefix('patient')->group(function () {
-            Route::get('appointments',                     [PatientAppointmentController::class, 'index']);
-            Route::post('appointments',                    [PatientAppointmentController::class, 'store']);
-            Route::get('appointments/{appointment}',       [PatientAppointmentController::class, 'show']);
+            Route::get('appointments',                      [PatientAppointmentController::class, 'index']);
+            Route::post('appointments',                     [PatientAppointmentController::class, 'store']);
+            Route::get('appointments/{appointment}',        [PatientAppointmentController::class, 'show']);
             Route::post('appointments/{appointment}/cancel',[PatientAppointmentController::class, 'cancel']);
+
+            Route::get('payments',                [PaymentController::class, 'index']);
+            Route::post('payments/intent',        [PaymentController::class, 'createIntent']);
         });
     });
 });

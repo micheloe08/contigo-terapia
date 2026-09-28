@@ -33,9 +33,20 @@ class SettingSeeder extends Seeder
             ['key' => 'social_youtube',   'value' => null,                       'type' => 'string',  'group' => 'social',  'label' => 'YouTube',                 'is_public' => true],
 
             // Legal
-            ['key' => 'privacy_policy',   'value' => null,                       'type' => 'text',    'group' => 'legal',   'label' => 'Política de privacidad',  'is_public' => true],
-            ['key' => 'data_policy',      'value' => null,                       'type' => 'text',    'group' => 'legal',   'label' => 'Política de datos',       'is_public' => true],
-            ['key' => 'terms_conditions', 'value' => null,                       'type' => 'text',    'group' => 'legal',   'label' => 'Términos y condiciones',  'is_public' => true],
+            ['key' => 'privacy_policy',   'value' => null,  'type' => 'text',    'group' => 'legal',       'label' => 'Política de privacidad',  'is_public' => true],
+            ['key' => 'data_policy',      'value' => null,  'type' => 'text',    'group' => 'legal',       'label' => 'Política de datos',       'is_public' => true],
+            ['key' => 'terms_conditions', 'value' => null,  'type' => 'text',    'group' => 'legal',       'label' => 'Términos y condiciones',  'is_public' => true],
+
+            // Comisiones
+            ['key' => 'default_commission_percentage',  'value' => '15.00', 'type' => 'decimal', 'group' => 'commissions', 'label' => 'Comisión por defecto (%)',             'is_public' => false],
+            ['key' => 'stripe_fee_percentage',          'value' => '3.60',  'type' => 'decimal', 'group' => 'commissions', 'label' => 'Comisión Stripe (%)',                  'is_public' => false],
+            ['key' => 'stripe_fee_fixed',               'value' => '3.00',  'type' => 'decimal', 'group' => 'commissions', 'label' => 'Comisión Stripe fija (MXN)',           'is_public' => false],
+            ['key' => 'mercadopago_fee_percentage',     'value' => '3.49',  'type' => 'decimal', 'group' => 'commissions', 'label' => 'Comisión MercadoPago (%)',             'is_public' => false],
+            ['key' => 'mercadopago_fee_fixed',          'value' => '0.00',  'type' => 'decimal', 'group' => 'commissions', 'label' => 'Comisión MercadoPago fija (MXN)',      'is_public' => false],
+
+            // Membresías
+            ['key' => 'membership_price_monthly',       'value' => '499.00','type' => 'decimal', 'group' => 'membership',  'label' => 'Precio membresía mensual (MXN)',       'is_public' => true],
+            ['key' => 'membership_commission_discount', 'value' => '5.00',  'type' => 'decimal', 'group' => 'membership',  'label' => 'Descuento comisión con membresía (%)', 'is_public' => false],
         ];
 
         foreach ($settings as $setting) {
