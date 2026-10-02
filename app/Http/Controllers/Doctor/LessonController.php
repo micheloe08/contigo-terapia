@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Doctor;
 use App\Http\Controllers\Controller;
 use App\Models\Lesson;
 use App\Models\LessonProgress;
+use App\Services\CertificateService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
 
@@ -74,9 +75,19 @@ class LessonController extends Controller
             ? round($completedLessons / $totalLessons * 100)
             : 0;
 
+        $certificate = null;
+        if ($percentage === 100) {
+            $cert        = app(CertificateService::class)->issue($user, $course);
+            $certificate = [
+                'number'       => $cert->certificate_number,
+                'download_url' => route('doctor.certificates.download', $cert->id),
+            ];
+        }
+
         return response()->json([
             'completed'           => true,
             'progress_percentage' => $percentage,
+            'certificate'         => $certificate,
         ]);
     }
 }

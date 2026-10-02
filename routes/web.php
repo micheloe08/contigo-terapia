@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Public\CertificateVerifyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Verificación pública de certificados (sin autenticación)
+Route::get('/verify/{certificateNumber}', [CertificateVerifyController::class, 'show']);
