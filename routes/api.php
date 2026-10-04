@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\CatalogController;
+use App\Http\Controllers\Admin\CertificateSettingsController as AdminCertificateSettingsController;
 use App\Http\Controllers\Admin\CourseController as AdminCourseController;
 use App\Http\Controllers\Admin\ModuleController as AdminModuleController;
 use App\Http\Controllers\Admin\LessonController as AdminLessonController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Doctor\ScheduleController;
 use App\Http\Controllers\Doctor\AppointmentController as DoctorAppointmentController;
 use App\Http\Controllers\Doctor\CourseController as DoctorCourseController;
 use App\Http\Controllers\Doctor\LessonController as DoctorLessonController;
+use App\Http\Controllers\Doctor\CertificateController as DoctorCertificateController;
 use App\Http\Controllers\Patient\AppointmentController as PatientAppointmentController;
 use App\Http\Controllers\Patient\PaymentController;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +49,11 @@ Route::prefix('v1')->group(function () {
             Route::post('catalogs/{type}',       [CatalogController::class, 'store']);
             Route::put('catalogs/{type}/{id}',   [CatalogController::class, 'update']);
             Route::delete('catalogs/{type}/{id}',[CatalogController::class, 'destroy']);
+
+            // Configuración de certificados
+            Route::get('settings/certificates',           [AdminCertificateSettingsController::class, 'index']);
+            Route::post('settings/certificates',          [AdminCertificateSettingsController::class, 'update']);
+            Route::post('settings/certificates/signature',[AdminCertificateSettingsController::class, 'uploadSignature']);
         });
 
         // Rutas de admin y operator
@@ -82,6 +89,11 @@ Route::prefix('v1')->group(function () {
             Route::post('courses/{course}/enroll', [DoctorCourseController::class, 'enroll']);
             Route::get('lessons/{lesson}', [DoctorLessonController::class, 'show']);
             Route::post('lessons/{lesson}/complete', [DoctorLessonController::class, 'complete']);
+
+            // Certificados
+            Route::get('courses/{course}/certificate', [DoctorCertificateController::class, 'show']);
+            Route::get('certificates/{certificate}/download', [DoctorCertificateController::class, 'download'])
+                ->name('doctor.certificates.download');
 
             Route::get('schedules',               [ScheduleController::class, 'index']);
             Route::post('schedules',              [ScheduleController::class, 'upsert']);
