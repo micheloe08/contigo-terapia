@@ -79,8 +79,16 @@ class User extends Authenticatable
 
     public function hasActiveMembership(): bool
     {
-        return $this->subscriptions()
-            ->whereIn('status', ['active', 'trialing'])
+        // Only patients have subscriptions; doctors and other roles do not
+        if (!$this->isPatient()) {
+            return false;
+        }
+        $patientId = $this->patient?->id;
+        if (!$patientId) {
+            return false;
+        }
+        return \App\Models\Subscription::where('patient_id', $patientId)
+            ->whereIn('status', ['active', 'paused'])
             ->exists();
     }
 
