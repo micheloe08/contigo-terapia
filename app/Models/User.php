@@ -76,4 +76,16 @@ class User extends Authenticatable
     {
         return in_array($this->role, $roles);
     }
+
+    public function hasActiveMembership(): bool
+    {
+        return $this->subscriptions()
+            ->whereIn('status', ['active', 'trialing'])
+            ->exists();
+    }
+
+    public function subscriptions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Subscription::class);
+    }
 }

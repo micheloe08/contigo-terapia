@@ -2,10 +2,15 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\CatalogController;
+use App\Http\Controllers\Admin\CourseController as AdminCourseController;
+use App\Http\Controllers\Admin\ModuleController as AdminModuleController;
+use App\Http\Controllers\Admin\LessonController as AdminLessonController;
 use App\Http\Controllers\Supervisor\DoctorApprovalController;
 use App\Http\Controllers\Public\DoctorSearchController;
 use App\Http\Controllers\Doctor\ScheduleController;
 use App\Http\Controllers\Doctor\AppointmentController as DoctorAppointmentController;
+use App\Http\Controllers\Doctor\CourseController as DoctorCourseController;
+use App\Http\Controllers\Doctor\LessonController as DoctorLessonController;
 use App\Http\Controllers\Patient\AppointmentController as PatientAppointmentController;
 use App\Http\Controllers\Patient\PaymentController;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +54,17 @@ Route::prefix('v1')->group(function () {
             // Aquí irán endpoints de gestión compartidos
         });
 
+        // Rutas de cursos — admin y operator
+        Route::middleware('role:admin,operator')->prefix('admin')->group(function () {
+            Route::apiResource('courses', AdminCourseController::class);
+            Route::post('courses/{course}/modules', [AdminModuleController::class, 'store']);
+            Route::put('modules/{module}', [AdminModuleController::class, 'update']);
+            Route::delete('modules/{module}', [AdminModuleController::class, 'destroy']);
+            Route::post('modules/{module}/lessons', [AdminLessonController::class, 'store']);
+            Route::put('lessons/{lesson}', [AdminLessonController::class, 'update']);
+            Route::delete('lessons/{lesson}', [AdminLessonController::class, 'destroy']);
+        });
+
         // Rutas de supervisor de terapeutas
         Route::middleware('role:admin,supervisor_doctor')->prefix('supervisor')->group(function () {
             Route::get('stats',                          [DoctorApprovalController::class, 'stats']);
@@ -60,6 +76,13 @@ Route::prefix('v1')->group(function () {
 
         // Rutas de doctor
         Route::middleware('role:doctor')->prefix('doctor')->group(function () {
+            // Cursos para doctores
+            Route::get('courses', [DoctorCourseController::class, 'index']);
+            Route::get('courses/{course}', [DoctorCourseController::class, 'show']);
+            Route::post('courses/{course}/enroll', [DoctorCourseController::class, 'enroll']);
+            Route::get('lessons/{lesson}', [DoctorLessonController::class, 'show']);
+            Route::post('lessons/{lesson}/complete', [DoctorLessonController::class, 'complete']);
+
             Route::get('schedules',               [ScheduleController::class, 'index']);
             Route::post('schedules',              [ScheduleController::class, 'upsert']);
             Route::delete('schedules/{schedule}', [ScheduleController::class, 'destroy']);
