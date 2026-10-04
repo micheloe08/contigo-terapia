@@ -52,8 +52,8 @@ class Patient extends Model
     }
 
     // Helpers
-    public function age(): int
+    public function age(): ?int
     {
-        return $this->birth_date->age;
+        return $this->birth_date?->age;
     }
 }

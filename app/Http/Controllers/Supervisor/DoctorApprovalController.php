@@ -75,8 +75,6 @@ class DoctorApprovalController extends Controller
 
         $doctor->update([
             'status'           => 'rejected',
-            'approved_by'      => $request->user()->id,
-            'approved_at'      => now(),
             'rejection_reason' => $request->reason,
         ]);
 
