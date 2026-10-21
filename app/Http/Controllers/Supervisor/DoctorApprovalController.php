@@ -48,6 +48,7 @@ class DoctorApprovalController extends Controller
 
         $doctor->update([
             'status'           => 'approved',
+            'license_status'   => 'verified',
             'approved_by'      => $request->user()->id,
             'approved_at'      => now(),
             'rejection_reason' => null,
