@@ -17,7 +17,7 @@ class DoctorSearchController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = Doctor::with([
-            'user:id,name,email',
+            'user:id,name',
             'specialty:id,name,slug',
             'therapeuticApproaches:id,name,slug',
             'therapyModalities:id,name,slug,icon',
@@ -100,7 +100,7 @@ class DoctorSearchController extends Controller
         }
 
         $doctor->load([
-            'user:id,name,email',
+            'user:id,name',
             'specialty:id,name,slug',
             'therapeuticApproaches:id,name,slug',
             'therapyModalities:id,name,slug,icon',
