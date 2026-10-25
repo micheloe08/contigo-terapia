@@ -6,7 +6,8 @@ use App\Models\Course;
 use App\Models\CourseCertificate;
 use App\Models\Setting;
 use App\Models\User;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -52,7 +53,12 @@ class CertificateService
         $issuedAt = now();
 
         // Renderizar Blade → PDF
-        $pdf = Pdf::loadView('certificates.template', [
+        // chroot = raíz del proyecto para permitir logo (public/) y firma (storage/)
+        $options = new Options();
+        $options->setChroot(base_path());
+
+        $pdf = new Dompdf($options);
+        $pdf->loadHtml(view('certificates.template', [
             'userName'           => $user->name,
             'courseTitle'        => $course->title,
             'certificateNumber'  => $number,
@@ -62,7 +68,9 @@ class CertificateService
             'signatureImagePath' => $signatureImagePath,
             'qrBase64'           => $qrBase64,
             'logoPath'           => $logoPath,
-        ])->setPaper('a4', 'landscape');
+        ])->render());
+        $pdf->setPaper('a4', 'landscape');
+        $pdf->render();
 
         // Guardar en storage privado
         $filePath = "certificates/{$user->id}/cert-{$course->id}.pdf";
