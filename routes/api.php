@@ -33,9 +33,9 @@ Route::prefix('v1')->group(function () {
 
     // Rutas públicas — auth
     Route::prefix('auth')->group(function () {
-        Route::post('register/patient', [AuthController::class, 'registerPatient']);
-        Route::post('register/doctor',  [AuthController::class, 'registerDoctor']);
-        Route::post('login',            [AuthController::class, 'login']);
+        Route::post('register/patient', [AuthController::class, 'registerPatient'])->middleware('throttle:5,1');
+        Route::post('register/doctor',  [AuthController::class, 'registerDoctor'])->middleware('throttle:5,1');
+        Route::post('login',            [AuthController::class, 'login'])->middleware('throttle:10,1');
     });
 
     // Rutas protegidas — cualquier usuario autenticado
