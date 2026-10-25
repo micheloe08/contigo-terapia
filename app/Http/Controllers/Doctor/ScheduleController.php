@@ -96,7 +96,7 @@ class ScheduleController extends Controller
             ['doctor_id' => $doctor->id, 'blocked_date' => $data['blocked_date']],
             array_merge($data, [
                 'doctor_id'    => $doctor->id,
-                'day_of_week'  => Carbon::parse(\$data['blocked_date'])->dayOfWeekIso - 1,
+                'day_of_week'  => Carbon::parse($data['blocked_date'])->dayOfWeekIso - 1,
                 'start_time'   => '00:00',
                 'end_time'     => '23:59',
                 'is_available' => false,
